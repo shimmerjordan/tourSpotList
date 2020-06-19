@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=你的百度地图API"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+var data = [
+    [30.0, 499.0, 156.23], 
+	[55.0, 388.0, 147.99], 
+	[3.5, 338.0, 106.75], 
+	[20.0, 308.0, 75.93], 
+	[20.0, 298.0, 33.88], 
+	[0.3, 298.0, 84.17], 
+	[30.0, 268.0, 117.67], 
+	[72.0, 258.0, 165.0], 
+	[72.0, 244.9, 179.79], 
+	[37.3, 225.0, 102.16], 
+	[28.0, 210.0, 110.83], 
+	[69.0, 208.0, 138.5], 
+	[63.8, 199.0, 140.93],
+	[0.6, 188.0, 94.3], 
+	[91.9, 185.0, 135.97], 
+	[0.8, 170.0, 92.67], 
+	[45.0, 168.0, 80.25], 
+	[135.0, 160.0, 147.5], 
+	[60.0, 160.0, 108.82], 
+	[10.0, 140.0, 58.5], 
+	[39.0, 138.0, 91.67], 
+	[5.0, 90.0, 69.48], 
+	[1.9, 89.0, 73.34], 
+	[52.0, 82.8, 62.27]
+];
+var cities = ['上海', '湖北', '海南', '四川', '云南', '江苏', '陕西', '甘肃', '湖南', '广东', '重庆', '西藏', '天津', '青海', '辽宁', '浙江', '江西', '山西', '山东', '北京', '广西', '贵州', '河南', '安徽'];
+var barHeight = 30;
+
+option = {
+    title: {
+        text: '到底哪些地方去得起？？',
+        subtext: '钱包允许（数据来源：爬取的去哪旅行）'
+    },
+    legend: {
+        show: true,
+        data: ['价格范围', '均值']
+    },
+    grid: {
+        top: 100
+    },
+    angleAxis: {
+        type: 'category',
+        data: cities
+    },
+    tooltip: {
+        show: true,
+        formatter: function (params) {
+            var id = params.dataIndex;
+            return cities[id] + '<br>最低：' + data[id][0] + '<br>最高：' + data[id][1] + '<br>平均：' + data[id][2];
+        }
+    },
+    radiusAxis: {
+    },
+    polar: {
+    },
+    series: [{
+        type: 'bar',
+        itemStyle: {
+            color: 'transparent'
+        },
+        data: data.map(function (d) {
+            return d[0];
+        }),
+        coordinateSystem: 'polar',
+        stack: '最大最小值',
+        silent: true
+    }, {
+        type: 'bar',
+        data: data.map(function (d) {
+            return d[1] - d[0];
+        }),
+        coordinateSystem: 'polar',
+        name: '价格范围',
+        stack: '最大最小值'
+    }, {
+        type: 'bar',
+        itemStyle: {
+            color: 'transparent'
+        },
+        data: data.map(function (d) {
+            return d[2] - barHeight;
+        }),
+        coordinateSystem: 'polar',
+        stack: '均值',
+        silent: true,
+        z: 10
+    }, {
+        type: 'bar',
+        data: data.map(function (d) {
+            return barHeight * 2;
+        }),
+        coordinateSystem: 'polar',
+        name: '均值',
+        stack: '均值',
+        barGap: '-100%',
+        z: 10
+    }]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>
